@@ -1,0 +1,17 @@
+# Generated via Next.js
+.next
+.idea
+
+# Generated via Node.js
+node_modules
+
+# Generated via next-pwa
+**/public/workbox**
+**/public/sw**
+
+*.log
+.vercel
+.env*
+
+.DS_Store
+/public/worker-*.js

@@ -1,0 +1,1 @@
+alter table pipeline_runs add column stage varchar(100);

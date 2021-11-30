@@ -1,0 +1,33 @@
+@import "./variables-light";
+@import "./variables-custom";
+@import "../node_modules/bootstrap/scss/variables"; // defaults are here
+
+b,
+strong {
+  color: $headings-color;
+}
+
+.btn-primary {
+  &,
+  &:hover,
+  &:active {
+    color: $white;
+  }
+}
+
+.bg-guest {
+  background-color: $gray-200;
+}
+
+::-webkit-input-placeholder,
+::-moz-placeholder,
+:-ms-input-placeholder,
+:-moz-placeholder,
+::placeholder {
+  color: $gray-100;
+}
+
+label {
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+}

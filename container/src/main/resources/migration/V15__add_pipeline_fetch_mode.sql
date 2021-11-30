@@ -1,0 +1,1 @@
+alter table pipelines add column query_mode varchar(100) not null default 'INCREMENTAL';

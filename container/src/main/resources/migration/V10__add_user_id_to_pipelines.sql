@@ -1,0 +1,1 @@
+alter table pipelines add user_id bigint(20) not null;

@@ -1,0 +1,1 @@
+gcloud projects add-iam-policy-binding ${projectId} --member serviceAccount:${serviceAccount} --role roles/bigquery.user

@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: castled-app-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7050
+      protocol: TCP
+  selector:
+    castled: app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: castled-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      castled: app
+  template:
+    metadata:
+      labels:
+        castled: app
+    spec:
+      containers:
+        - name: castled-app-container
+          image: castled/app
+          env:
+            - name: APP_KAFKA_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: castled-env
+                  key: KAFKA_HOST
+            - name: APP_REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: castled-env
+                  key: REDIS_HOST
+            - name: APP_REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: castled-env
+                  key: REDIS_PORT
+            - name: APP_LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: castled-env
+                  key: LOG_LEVEL
+            - name: APP_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: DATABASE_URL
+            - name: APP_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: DATABASE_USER
+            - name: APP_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: DATABASE_PASSWORD
+            - name: OAUTH_GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_GOOGLE_CLIENT_ID
+            - name: OAUTH_GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_GOOGLE_CLIENT_SECRET
+
+            - name: OAUTH_HUBSPOT_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_HUBSPOT_CLIENT_ID
+            - name: OAUTH_HUBSPOT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_HUBSPOT_CLIENT_SECRET
+            - name: OAUTH_SALESFORCE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_SALESFORCE_CLIENT_ID
+            - name: OAUTH_SALESFORCE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_SALESFORCE_CLIENT_SECRET
+            - name: OAUTH_MICROSOFT_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_MICROSOFT_CLIENT_ID
+            - name: OAUTH_MICROSOFT_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: OAUTH_MICROSOFT_CLIENT_SECRET
+            - name: S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: S3_BUCKET
+            - name: S3_BUCKET_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: castled-secrets
+                  key: S3_BUCKET_REGION
+          ports:
+            - containerPort: 7050
+

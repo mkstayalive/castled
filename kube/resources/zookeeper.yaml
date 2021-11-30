@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: castled-zookeeper-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 2181
+      protocol: TCP
+  selector:
+    castled: zookeeper
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: castled-zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      castled: zookeeper
+  template:
+    metadata:
+      labels:
+        castled: zookeeper
+    spec:
+      containers:
+        - name: castled-zookeeper-container
+          image: confluentinc/cp-zookeeper:5.3.0
+          env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "2181"
+            - name: ZOOKEEPER_TICK_TIME
+              value: "2000"
+          ports:
+            - containerPort: 2181
+          volumeMounts:
+            - name: castled-zookeeper-data-vol
+              mountPath: /var/lib/zookeeper/data
+            - name: castled-zookeeper-log-vol
+              mountPath: /var/lib/zookeeper/log
+      volumes:
+        - name: castled-zookeeper-data-vol
+          persistentVolumeClaim:
+            claimName: castled-zookeeper-data-vol
+        - name: castled-zookeeper-log-vol
+          persistentVolumeClaim:
+            claimName: castled-zookeeper-log-vol

@@ -1,0 +1,168 @@
+#
+# Environment variable injected into app docker container:
+# APP_KAFKA_HOST
+# APP_DATABASE_URL
+# APP_DATABASE_USER
+# APP_DATABASE_PASSWORD
+# APP_LOG_LEVEL
+#
+server:
+  applicationConnectors:
+    - type: http
+      port: 7050
+      bindHost: 0.0.0.0
+  adminConnectors:
+    - type: http
+      port: 7051
+  rootPath: /backend
+
+redis_config:
+  host: ${APP_REDIS_HOST:-localhost}
+  port: ${APP_REIDS_PORT:-6379}
+
+kafka_servers: ${APP_KAFKA_HOST:-localhost:9092}
+
+jarvis_task_config:
+  priority_cool_down_mins: 1
+  group_config:
+    - group: PIPELINE_RUN
+      worker_count: 10
+    - group: OTHERS
+      worker_count: 10
+
+jarvis_scheduler_config:
+  quartz_config:
+    org.quartz.scheduler.skipUpdateCheck: true
+    org.quartz.scheduler.instanceName: DatabaseScheduler
+    org.quartz.scheduler.instanceId: AUTO
+    org.quartz.scheduler.jobFactory.class: org.quartz.simpl.SimpleJobFactory
+    org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
+    org.quartz.threadPool.threadCount: 3
+    org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+    org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+    org.quartz.jobStore.useProperties: false
+    org.quartz.jobStore.dataSource: quartzDataSource
+    org.quartz.jobStore.tablePrefix: QRTZ_
+    org.quartz.jobStore.isClustered: true
+    org.quartz.jobStore.clusterCheckinInterval: 60000
+    org.quartz.dataSource.quartzDataSource.driver: com.mysql.cj.jdbc.Driver
+    org.quartz.dataSource.quartzDataSource.URL: ${APP_DATABASE_URL:-jdbc:mysql://localhost:3306/app?autoReconnect=true&user=user&password=user&useSSL=false&serverTimezone=UTC}
+    org.quartz.dataSource.quartzDataSource.user: ${APP_DATABASE_USER:-user}
+    org.quartz.dataSource.quartzDataSource.password: ${APP_DATABASE_PASSWORD:-user}
+    org.quartz.dataSource.quartzDataSource.maxConnections: 5
+
+  schedule_overrides:
+    io.castled.DummyScheduledJob: "0/30 * * * * ?"
+    io.castled.jarvis.taskmanager.scheduledjobs.TaskRetryJob: "0/30 * * * * ?"
+    io.castled.jarvis.taskmanager.scheduledjobs.TaskRefreshJob: "0/30 * * * * ?"
+
+
+database:
+  # the name of your JDBC driver
+  driverClass: com.mysql.cj.jdbc.Driver
+
+  # the username
+  user: ${APP_DATABASE_USER:-user}
+
+  # the password
+  password: ${APP_DATABASE_PASSWORD:-user}
+
+  # the JDBC URL
+  url: ${APP_DATABASE_URL:-jdbc:mysql://localhost:3306/app?autoReconnect=true&user=user&password=user&useSSL=false&serverTimezone=UTC}
+
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+
+  # the timeout before a connection validation queries fail
+  validationQueryTimeout: 3s
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+
+  # the amount of time to sleep between runs of the idle connection validation, abandoned cleaner and idle pool resizing
+  evictionInterval: 10s
+
+  # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
+  minIdleTime: 1 minute
+
+logging:
+  level: ${APP_LOG_LEVEL}
+  appenders:
+    - type: console
+  loggers:
+    io.dropwizard: ${APP_LOG_LEVEL}
+
+self_url_configuration:
+  server_url: http://localhost:3000/backend/
+  ui_url: http://localhost:3000
+
+jersey_client:
+  timeout: 5000ms
+  connectionTimeout: 5000ms
+  gzipEnabled: false
+
+kafka_config:
+  bootstrap_servers: ${APP_KAFKA_HOST:-localhost:9092}
+
+jwt_auth_configuration:
+  secret_key: secret
+  expiry_secs: 50000
+
+swagger:
+  resourcePackage: io.castled
+
+# TODO: Using invalid values for follwoing configs to make dropwizrd happy. Will fix later!
+
+gcp_service_account_creds:
+  account_key: ${GCP_ACCOUNT_KEY:-xx}
+  project_id: ${GCP_PROJECT_ID:-xx}
+
+s3_application_config:
+  bucket: ${S3_BUCKET:-xx}
+  region: ${S3_BUCKET_REGION:-US_EAST_1}
+
+tunnel_configuration:
+  private_key: xx
+  pass_phrase: xx
+
+oauth_client_config:
+  SALESFORCE:
+    client_id: ${OAUTH_SALESFORCE_CLIENT_ID:-}
+    client_secret: ${OAUTH_SALESFORCE_CLIENT_SECRET:-}
+  GOOGLE:
+    client_id: ${OAUTH_GOOGLE_CLIENT_ID:-}
+    client_secret: ${OAUTH_GOOGLE_CLIENT_SECRET:-}
+  HUBSPOT:
+    client_id: ${OAUTH_HUBSPOT_CLIENT_ID:-}
+    client_secret: ${OAUTH_HUBSPOT_CLIENT_SECRET:-}
+  MICROSOFT:
+    client_id: ${OAUTH_MICROSOFT_CLIENT_ID:-}
+    client_secret: ${OAUTH_MICROSOFT_CLIENT_SECRET:-}
+  INTERCOM:
+    client_id: ${OAUTH_INTERCOM_CLIENT_ID:-}
+    client_secret: ${OAUTH_INTERCOM_CLIENT_SECRET:-}
+  MAILCHIMP:
+    client_id: ${OAUTH_MAILCHIMP_CLIENT_ID:-}
+    client_secret: ${OAUTH_MAILCHIMP_CLIENT_SECRET:-}
+
+email_configuration:
+  from: xx
+  from_name: xx
+  smtp_user: xx
+  smtp_password: xx
+  smtp_host: xx
+  smtp_port: 00
+  email_enabled: false

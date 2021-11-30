@@ -1,0 +1,1 @@
+alter table service_account_details drop column team_id;

@@ -1,0 +1,58 @@
+name: Castled Docker Image CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      partToBump:
+        description: "Please choose the type of sem version upgrade : major|minor|patch"
+        required: true
+        default: "patch"
+
+jobs:
+
+  publishCastled:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+    
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: 'maven'
+          
+      - name: Build Jar
+        run: mvn clean package
+      
+      - name: Get Old Version
+        id: old_version
+        run: echo ::set-output name=OLD_VERSION::$(grep VERSION .env | cut -d"=" -f2)
+    
+      - name: Publish Castled Docker Images
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          PART_TO_BUMP: ${{ github.event.inputs.partToBump }}
+        run: ./tools/bin/release_version.sh
+        
+      - name: Get New Version
+        id: new_version
+        run: echo ::set-output name=NEW_VERSION::$(grep VERSION .env | cut -d"=" -f2)
+      
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GH_ACTION_PAT }}
+          branch: bump-version
+          branch-suffix: short-commit-hash
+          delete-branch: true
+          title: Bumping Castled version from ${{ steps.old_version.outputs.OLD_VERSION }} to ${{ steps.new_version.outputs.NEW_VERSION }}
+          body: Bumping Castled version
+          commit-message: Bumping Castled version from ${{ steps.old_version.outputs.OLD_VERSION }} to ${{ steps.new_version.outputs.NEW_VERSION }}
+          
+      - name: Pull Request Info
+        run: echo "Pull Request Url - ${{ steps.pr.outputs.pull-request-url }}"

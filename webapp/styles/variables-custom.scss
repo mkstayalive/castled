@@ -1,0 +1,45 @@
+@import "./colors";
+
+$font-weight-lighter: lighter !default;
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 600 !default;
+$font-weight-bolder: bolder !default;
+
+$font-weight-base: $font-weight-normal !default;
+
+$font-family-sans-serif: "Open Sans", ui-sans-serif, system-ui, -apple-system,
+  BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+  "Noto Color Emoji";
+
+$h1-font-size: 26 * 0.063rem;
+$h2-font-size: 24 * 0.063rem;
+$h3-font-size: 14 * 0.063rem;
+$h4-font-size: 13 * 0.063rem;
+$h5-font-size: 11 * 0.063rem;
+$h6-font-size: 10 * 0.063rem;
+
+$font-size-base: 14 * 0.063rem !default;
+$font-size-sm: 11 * 0.063rem !default;
+$font-size-md: 12 * 0.063rem !default;
+$font-size-lg: 16 * 0.063rem !default;
+
+$link-decoration: none;
+
+$border-radius: 0.2rem !default;
+$border-radius-sm: 0.15rem !default;
+$border-radius-lg: 0.3rem !default;
+$border-radius-pill: 50rem !default;
+
+$enable-negative-margins: true;
+
+$title-fs: 16 * 0.063rem;
+
+$input-btn-padding-y: 0.175rem !default;
+$btn-font-weight: $font-weight-bold !default;
+
+$nav-tabs-border-color: $gray-100;
+
+$link-color: $blue-base;
+$table-hover-bg: $primary-lite !default;

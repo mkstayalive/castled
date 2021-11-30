@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  app:
+    image: castled/app:${VERSION}
+    build:
+      dockerfile: Dockerfile
+      context: container
+      labels:
+        io.castled.git-revision: ${GIT_REVISION}
+
+  webapp:
+    image: castled/webapp:${VERSION}
+    build:
+      dockerfile: Dockerfile
+      context: webapp
+      args:
+        - ARG_API_BASE=${API_BASE}
+        - ARG_API_BASE_URL=${API_BASE_URL}
+        - ARG_APP_BASE_URL=${APP_BASE_URL}
+      labels:
+        io.castled.git-revision: ${GIT_REVISION}
+

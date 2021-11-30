@@ -1,0 +1,1 @@
+alter table oauth_details drop user_id;

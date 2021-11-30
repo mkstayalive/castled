@@ -1,0 +1,23 @@
+{
+	"name": "Castled",
+	"short_name": "Castled",
+	"description": "Reverse ETL Application",
+	"icons": [
+		{
+			"src": "/images/favicon/android-chrome-192x192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/images/favicon/android-chrome-512x512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/?source=pwa",
+	"background_color": "#1d2020",
+	"orientation": "portrait",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#1d2020"
+}

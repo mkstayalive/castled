@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: castled-redis-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+      protocol: TCP
+  selector:
+    castled: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: castled-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      castled: redis
+  template:
+    metadata:
+      labels:
+        castled: redis
+    spec:
+      containers:
+        - name: castled-redis-container
+          image: redis:6.2-alpine
+          ports:
+            - containerPort: 6379
