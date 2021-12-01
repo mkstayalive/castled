@@ -9,6 +9,7 @@ x-logging: &default-logging
 services:
   db:
     image: mysql:5.7.15
+    platform: linux/x86_64
     container_name: castled-db
     restart: unless-stopped
     logging: *default-logging
