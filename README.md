@@ -2,7 +2,7 @@
 
 # Introduction
 
-Castled is a Reverse-ETL tool which enables you to perodically sync the data from a **source**, the public cloud warehouse where you store all your data, to a **destination** which is your favorite operational tool there by enabling the sales,marketing or service teams.
+Castled is a Reverse ETL tool which enables you to perodically sync the data from a **source**, the public cloud warehouse where you store all your data, to a **destination** which is your favorite operational tool there by enabling the sales,marketing or service teams.
 
 Castled uses a **diff** computation logic for the data sync happening between your data warehouse and your destination app. This is done to make sure the computation happens in **ISOLATION** and **CONFINED** to your data warehouse. The diff computation process ensures it is not creating any kind of performance bottleneck at the source or the destination.It ensures that the database load stays with in limits at the source and at the same time the payload used to invoke the destination APIs are kept as light as possible.
 
