@@ -28,6 +28,9 @@ services:
     container_name: castled-app
     restart: unless-stopped
     logging: *default-logging
+    depends_on:
+      - kafka
+      - db
     environment:
       - APP_KAFKA_HOST=${KAFKA_HOST}
       - APP_REDIS_HOST=${REDIS_HOST}
