@@ -8,8 +8,8 @@ x-logging: &default-logging
 
 services:
   db:
-    image: mysql:5.7.15
-    platform: linux/x86_64
+    image: mysql:5.7
+    platform: linux/amd64
     container_name: castled-db
     restart: unless-stopped
     logging: *default-logging
@@ -51,7 +51,7 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:5.3.0
-    container_name: castled-zookeper
+    container_name: castled-zookeeper
     restart: unless-stopped
     logging: *default-logging
     environment:
